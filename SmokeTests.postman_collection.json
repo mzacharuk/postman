@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "29017abe-e50c-4f3e-a694-f5d1fccec2ce",
+		"name": "SmokeTests",
+		"description": "szkolenie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "4702790"
+	},
+	"item": [
+		{
+			"name": "Positive scenarios",
+			"item": [
+				{
+					"name": "CreateBooking Copy 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let csvData = pm.iterationData.get(\"firstname\");\r",
+									"console.log(\"data from csv >> firstname: \", csvData)\r",
+									"\r",
+									"if(csvData){\r",
+									"    console.log(\">>>>>>> Reading from csv...\")\r",
+									"    //...\r",
+									"\r",
+									"    //\r",
+									"}else{\r",
+									"    console.log(\">>>>>>> Generating random values\")\r",
+									"    let userName = pm.variables.replaceIn('{{$randomFirstName}}')\r",
+									"    pm.environment.set(\"firstName\", userName);\r",
+									"    console.log(\">>>> random user name: \", userName)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//set booking id to env variables\r",
+									"let responseData = pm.response.json();\r",
+									"let bookingId = responseData.bookingid;\r",
+									"console.log(\"bookingId: \", bookingId);\r",
+									"pm.environment.set(\"bookingId\", bookingId);\r",
+									"\r",
+									"//tests\r",
+									"console.log(typeof pm.response.json())\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.to.have.status(200));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Bookingid is a non-negative integer\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData.bookingid).to.be.a('number').and.to.be.at.least(0);\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Booking object is present in the response\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData).to.be.an('object');\r",
+									"//     pm.expect(responseData.booking).to.exist;\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Firstname and lastname must be non-empty strings\", function () {\r",
+									"//   const responseData = pm.response.json();\r",
+									"  \r",
+									"//   pm.expect(responseData).to.be.an('object');\r",
+									"//   pm.expect(responseData.booking.firstname).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Firstname should not be empty\");\r",
+									"//   pm.expect(responseData.booking.lastname).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Lastname should not be empty\");\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Totalprice is a non-negative number\", function () {\r",
+									"//     const responseData = pm.response.json();\r",
+									"    \r",
+									"//     pm.expect(responseData.totalprice).to.be.a('number');\r",
+									"//     pm.expect(responseData.totalprice).to.be.at.least(0, \"Totalprice should be a non-negative number\");\r",
+									"// });\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-test-automation",
+								"value": "test_automation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\" : \"{{firstName}}\",\r\n    \"lastname\" : \"Brown\",\r\n    \"totalprice\" : 111,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2018-01-01\",\r\n        \"checkout\" : \"2019-01-01\"\r\n    },\r\n    \"additionalneeds\" : \"Breakfast\"\r\n}"
+						},
+						"url": "{{host}}booking"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Booking by ID Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();",
+									"",
+									"",
+									"pm.test('Status code equals to 200', function () {",
+									"    pm.expect(pm.response.code, 'Response code should be eqauls to 200').to.eql(200);",
+									"});",
+									"console.log(\">>> response.firstname \", responseData.firstname)",
+									"pm.test('Firstname should equals to name provided by user', function (){",
+									"    pm.expect(responseData.firstname, \"Firstname should match\").to.contain(pm.environment.get(\"firstName\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}booking/{{bookingId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GetBookingIds Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"2.Exist already created booking with proper id\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"bookingId\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}booking/"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative scenarios",
+			"item": [
+				{
+					"name": "Get Booking by ID Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code equals to 200\", function () {\r",
+									"    pm.expect(pm.response.code, \"Response code should be eqauls to 200\").to.eql(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}booking/99999999999999"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
