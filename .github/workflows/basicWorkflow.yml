@@ -45,10 +45,10 @@ jobs:
       # Run collection
       #newman run collection.json -e environment.json -r htmlextra
       #newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html
-      #newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure
+      #newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure --disable-unicode
       - name: Run collection
         run: |
-          newman run collection.json -e environment.json -r htmlextra --insecure --disable-unicode
+          newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure --disable-unicode
           
       # Publish report
       - name: Publish report
