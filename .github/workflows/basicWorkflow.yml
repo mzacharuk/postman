@@ -45,7 +45,7 @@ jobs:
       # Run collection
       - name: Run collection
         run: |
-          newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html0
+          newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html
           
       # Publish report
       - name: Publish report
