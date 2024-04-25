@@ -43,10 +43,11 @@ jobs:
         run: mkdir -p test_results
 
       # Run collection
+      #newman run collection.json -e environment.json -r htmlextra
+      #newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html
       - name: Run collection
         run: |
-          #newman run collection.json -e environment.json -r htmlextra
-           newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html
+          newman run "collection.json" -e "environment.json"
           
       # Publish report
       - name: Publish report
