@@ -45,11 +45,11 @@ jobs:
       # Run collection
       - name: Run collection
         run: |
-          newman run "collection.json" -e "environment.json"
+          newman run "collection.json" -e "environment.json" -r htmlextra
           
       # Publish report
       - name: Publish report
         uses: actions/upload-artifact@v3
         with:
           name: test-run-reports
-          path: test_results
+          path: newman
