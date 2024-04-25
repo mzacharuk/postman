@@ -33,7 +33,9 @@ jobs:
       - name: Install newman
         run: |
           npm install -g newman
-          npm install -g newman-reporter-htmlextra
+
+      - name: Install reporter
+        run: npm install -g newman-reporter-htmlextra
 
       # Make directory to upload the test results
       - name: Make directory for uploading the test results
@@ -44,8 +46,7 @@ jobs:
       #newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html
       #newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure --disable-unicode
       - name: Run collection
-        run: |
-          newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure --disable-unicode
+        run: newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure --disable-unicode
           
       # Publish report
       - name: Publish report
