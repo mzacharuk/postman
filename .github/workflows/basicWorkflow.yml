@@ -46,7 +46,7 @@ jobs:
       #newman run "collection.json" -e "environment.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html
       #newman run "SmokeTests.postman_collection.json" -e "TestEnv.json" -r htmlextra --reporter-htmlextra-export test_results/test_report.html --insecure --disable-unicode
       - name: Run collection
-        run: newman run collection.json -e environment.json -r htmlextra
+        run: newman run collection.json -e environment.json
           
       # Publish report
       - name: Publish report
